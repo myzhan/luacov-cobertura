@@ -1,4 +1,6 @@
 # idea ide
 .idea/
 /*.iml
+
+# luarocks package
 /*.rock
