@@ -1,7 +1,7 @@
 package = "luacov-cobertura"
 version = "0.1-1"
 source = {
-   url = "git@github.com:krux/luacov-cobertura.git",
+   url = "https://github.com/krux/luacov-cobertura.git",
    tag = "v0.1",
 }
 description = {
