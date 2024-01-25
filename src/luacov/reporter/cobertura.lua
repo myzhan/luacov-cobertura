@@ -16,6 +16,8 @@ function cobertura_reporter:new(conf)
 		return nil, err
 	end
 
+	o.conf = conf
+
 	if conf.cobertura.filenameparser then
 		local parsed_data = {}
 		local files = {}
@@ -49,10 +51,22 @@ function cobertura_reporter:on_start()
 end
 
 function cobertura_reporter:on_new_file(filename)
-	local class_name = filename:gsub("^.*/", "") -- "test/package/file.lua" -> "file.lua"
-	local package_name = filename:gsub(filename:gsub("^.*/", ""), ""):gsub("/$", "") -- "test/package/file.lua" -> "test/package"
+	local class_name
+	local package_name
+	if self.conf.cobertura.packagenameparser then
+		package_name = self.conf.cobertura.packagenameparser(filename)
+	else
+		package_name = filename:gsub(filename:gsub("^.*/", ""), ""):gsub("/$", "") -- "test/package/file.lua" -> "test/package"
+	end
+
+	if self.conf.cobertura.classnameparser then
+		class_name = self.conf.cobertura.classnameparser(filename)
+	else
+		class_name = filename:gsub("^.*/", "") -- "test/package/file.lua" -> "file.lua"
+	end
 
 	local package
+
 	for _,p in pairs(self.cobertura.coverage.packages) do
 		if p.package.name == package_name then
 			package = p.package
@@ -70,7 +84,6 @@ function cobertura_reporter:on_new_file(filename)
 		}
 		table.insert(self.cobertura.coverage.packages, { package = package })
 	end
-
 
 	local class = {
 		name = class_name,
