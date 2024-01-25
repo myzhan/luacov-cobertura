@@ -42,7 +42,9 @@ function cobertura_reporter:on_start()
 			["branch-rate"] = 0,
 			version = "1.9",
 			timestamp = os.time() * 1000,
-			sources = {},
+			sources = {
+				source = { "/" }
+			},
 			packages = {}
 		}
 	}
