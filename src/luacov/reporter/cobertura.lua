@@ -87,6 +87,10 @@ function cobertura_reporter:on_new_file(filename)
 		table.insert(self.cobertura.coverage.packages, { package = package })
 	end
 
+	if self.conf.cobertura.classfilenameparser then
+		filename = self.conf.cobertura.classfilenameparser(filename)
+	end
+
 	local class = {
 		name = class_name,
 		filename = filename,
